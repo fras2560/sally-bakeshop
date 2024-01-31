@@ -6,6 +6,7 @@ const { Order } = require('../models/order');
 const { Baker } = require('../models/baker');
 
 let today_bakers = [];
+const MAX_DAY_DURATION = 60*60*8;
 
 const scheduleStore = () => {
   db.getBakers().then((bakers) => {
@@ -89,7 +90,7 @@ router.delete("/order/:id", function(req, res) {
 router.post("/order", function(req, res) {
   const body = req.body;
   const order = new Order(null, body.name, body.duration, new Date());
-  if (!storeHaveCapacity(order)) {
+  if (!storeHaveCapacity(order) || order.duration > MAX_DAY_DURATION) {
     // might not be the best status code but using it for now
     res.statusCode = 413;
     res.send("Do not have capacity for order");
