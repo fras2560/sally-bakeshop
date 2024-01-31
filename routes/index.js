@@ -18,6 +18,7 @@ const scheduleStore = () => {
 }
 
 const scheduleOrders = (orders) => {
+  orders = orders.sort((o1, o2) => o2.duration - o1.duration);
   today_bakers = today_bakers.map((baker) => {
     baker.clearOrders();
     return baker;
